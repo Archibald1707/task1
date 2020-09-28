@@ -2,27 +2,25 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define STAT_VOL 20
-
 char *getstr(void)    /* ввод строки (с очисткой памяти) */
 {
-    int len = sizeof(char) * STAT_VOL;
-    size_t newstrlen;
+    int len = sizeof(char) * 20;
+    size_t newStringLength;
     int position = 0;
-    char *str = malloc(sizeof(char) * STAT_VOL);
+    char *str = malloc(sizeof(char) * 20);
     if (!str)
     {
         printf("memory allocation error!");
         exit(-1);
     }
 
-    while ( fgets(str + position, STAT_VOL, stdin) )
+    while ( fgets(str + position, 20, stdin) )
     {
-        newstrlen = strlen(str);
-        if (str[newstrlen - 1] != '\n')
+        newStringLength = strlen(str);
+        if (str[newStringLength - 1] != '\n')
         {
-            position = newstrlen;
-            len += sizeof(char) * STAT_VOL;
+            position = newStringLength;
+            len += sizeof(char) * 20;
             str = realloc(str, len);
             if (!str)
             {
@@ -32,7 +30,7 @@ char *getstr(void)    /* ввод строки (с очисткой памяти
         }
         else
         {
-            str[newstrlen - 1] = '\0';
+            str[newStringLength - 1] = '\0';
             return str;
         }
     }
@@ -42,61 +40,61 @@ char *getstr(void)    /* ввод строки (с очисткой памяти
     return NULL;
 }
 
-void bubblesort(char **arrofstr, int numberofelem)    /* самая простая сортировка пузырьком */
+void bubbleSort(char **arrayOfString, int numberOfElem)    /* самая простая сортировка пузырьком */
 {
     char *temp = NULL;
     int i; int j;
-    for(i=1;i<numberofelem;++i)
+    for(i=1;i<numberOfElem;++i)
     {
-        for(j=1;j<numberofelem;++j)
+        for(j=1;j<numberOfElem;++j)
         {
-            if(strcmp(arrofstr[j], arrofstr[j-1])<0)    /* меняет местами указатели на строки в массиве указателей */
+            if(strcmp(arrayOfString[j], arrayOfString[j-1])<0)    /* меняет местами указатели на строки в массиве указателей */
             {
-                temp = arrofstr[j];
-                arrofstr[j] = arrofstr[j-1];
-                arrofstr[j-1] = temp;
+                temp = arrayOfString[j];
+                arrayOfString[j] = arrayOfString[j-1];
+                arrayOfString[j-1] = temp;
             }
         }
     }
 }
 
-void outstr(char **arrofstr, int numberofelem)    /* вывод строк */
+void outstr(char **arrayOfString, int numberOfElem)    /* вывод строк */
 {
-    int currentelem = 0;
-    while(currentelem < numberofelem)
+    int currentElement = 0;
+    while(currentElement<numberOfElem)
     {
-        printf("%s\n", arrofstr[currentelem]);
-        free(arrofstr[currentelem]);
-        ++currentelem;
+        printf("%s\n", arrayOfString[currentElement]);
+        free(arrayOfString[currentElement]);
+        ++currentElement;
     }
 }
 
 int main() {    /* main (getstr X n); sort; output; free */
-    int part = 0; int amountofstr = 0;
+    int part = 0; int amountOfString = 0;
     char *str = NULL;
-    char **arrofstr = (char**)malloc(sizeof(char*) * STAT_VOL);
-    if (!arrofstr)
+    char **arrayOfString = (char**)malloc(sizeof(char*) * 20);
+    if (!arrayOfString)
     {
         printf("memory reallocation error!");
         exit(-1);
     }
     while((str=getstr()))
     {
-        if((part+1)%STAT_VOL == 0)
+        if((part+1)%20 == 0)
         {
-            arrofstr = realloc(arrofstr, sizeof(char*) * (part + STAT_VOL));
-            if(!arrofstr)
+	  arrayOfString = realloc(arrayOfString, sizeof(char*) * (part + 20));
+            if(!arrayOfString)
             {
                 printf("memory reallocation error!");
                 exit(-1);
             }
         }
-        arrofstr[part++] = str;
-	++amountofstr;
+        arrayOfString[part++] = str;
+	++amountOfString;
     }
-    bubblesort(arrofstr, amountofstr);    /* сортировка и вывод */
-    outstr(arrofstr, amountofstr);
-    free(arrofstr);
+    bubbleSort(arrayOfString, amountOfString);    /* сортировка и вывод */
+    outstr(arrayOfString, amountOfString);
+    free(arrayOfString);
     return 0;
 }
 
